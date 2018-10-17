@@ -44,6 +44,11 @@ final class Core extends Helpers\Singleton {
 			return false;
 		}
 
+		// Installing processes
+		if (defined('WP_INSTALLING') && WP_INSTALLING) {
+			return false;
+		}
+
 		// Avoid CRON requests
 		if (defined('DOING_CRON') && DOING_CRON) {
 			return false;
