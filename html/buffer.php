@@ -39,8 +39,8 @@ class Buffer extends Helpers\Singleton {
 		}
 
 		/**
-		 * Defines the regexp pattern modifiers
-		 * By default activates the UTF8 support
+		 * Defines the regexp pattern modifiers for proper UTF8 support
+		 * Enabled by default, can be deactivated via constant
 		 */
 		$pm = 's';
 		if (!defined('MINIFY_HTML_UTF8_SUPPORT') || MINIFY_HTML_UTF8_SUPPORT) {
@@ -73,7 +73,7 @@ class Buffer extends Helpers\Singleton {
 
 		/**
 		 * Removes self-closing markup for HTML5 documents
-		 * Disabled by default
+		 * Disabled by default, can be enabled via constant
 		 */
 		if (defined('MINIFY_HTML_SELF_CLOSING') && MINIFY_HTML_SELF_CLOSING) {
 			$test = strtolower(substr(ltrim($buffer), 0, 15));
