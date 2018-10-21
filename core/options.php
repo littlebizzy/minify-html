@@ -33,13 +33,13 @@ class Options {
 	public function __construct() {
 
 		/**
-		 * Decides if replace extra spaces by single spaces
+		 * Decides if replace extra spaces in HTML (except in styles, javascript code, and the content of textarea and pre tags)
 		 * Enabled by default, can be deactivated via constant
 		 */
 		$this->args['spacing'] = !defined('MINIFY_HTML_REMOVE_EXTRA_SPACING') || MINIFY_HTML_REMOVE_EXTRA_SPACING;
 
 		/**
-		 * Decides if remove line breaks
+		 * Decides if remove line breaks in HTML (except in styles, javascript code, and the content of textarea and pre tags)
 		 * Enabled by default, it can be deactivated via constant
 		 */
 		$this->args['lineBreaks'] = !defined('MINIFY_HTML_REMOVE_LINE_BREAKS') || MINIFY_HTML_REMOVE_LINE_BREAKS;
@@ -57,7 +57,7 @@ class Options {
 		$this->args['comments'] = !defined('MINIFY_HTML_REMOVE_COMMENTS') || MINIFY_HTML_REMOVE_COMMENTS;
 
 		/**
-		 * Decides if minify inline styles between <style></style> tags
+		 * Decides if minify inline styles between <style></style> tags removing extra espaces and line breaks
 		 * Enabled by default, it can be deactivated via constant
 		 */
 		$this->args['styles'] = !defined('MINIFY_HTML_INLINE_STYLES') || MINIFY_HTML_INLINE_STYLES;
