@@ -35,8 +35,6 @@ class Buffer extends Helpers\Singleton {
 
 	/**
 	 * Ouput buffer operations
-	 * Strongly inspired in Minify HTML plugin
-	 * https://wordpress.org/plugins/minify-html-markup/
 	 */
 	public function output($buffer) {
 

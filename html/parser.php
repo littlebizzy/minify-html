@@ -55,6 +55,8 @@ class Parser {
 
 	/**
 	 * Parse HTML using the provided options
+	 * Strongly inspired in Minify HTML plugin
+	 * https://wordpress.org/plugins/minify-html-markup/
 	 */
 	public function parse($html) {
 
