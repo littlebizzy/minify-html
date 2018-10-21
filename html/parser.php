@@ -61,130 +61,129 @@ class Parser {
 		// Get vars
 		extract($this->args);
 
-		// Check for heavy changes
-		if ($comments || $styles || $scripts) {
+		// Regexp pattern modifier
+		$pm = $utf8Support? 'u' : 's';
 
-			// Regexp pattern modifier
-			$pm = $utf8Support? 'u' : 's';
+		// Evaluates self-closing tags
+		if ($selfClosing) {
+			$test = strtolower(substr(ltrim($html), 0, 15));
+			$selfClosing = ($test == '<!doctype html>');
+		}
 
-			// Prepare line feeds
-			$html = str_replace(chr(13).chr(10), chr(10), $html);
+		// Transformations
+		$tags_src = [];
+		$tags_new = [];
+		$tags = ['style', 'script', 'textarea', 'pre'];
 
-			// Transforms
-			$tags_src = [];
-			$tags_new = [];
-			$tags = ['script', 'pre', 'textarea', 'style'];
+		// Prepare delimiters
+		foreach ($tags as $tag) {
 
-			// Prepare delimiters
-			foreach ($tags as $tag) {
+			// Tag
+			$ini = '<'.$tag;
+			$end = '/'.$tag.'>';
 
-				// Tag
-				$ini = '<'.$tag;
-				$end = '/'.$tag.'>';
+			// Source and new tag
+			$tags_src[] = $ini;
+			$tags_src[] = $end;
+			$tags_new[] = self::TAG_INI.$ini;
+			$tags_new[] = $end.self::TAG_END;
+		}
 
-				// Source and new tag
-				$tags_src[] = $ini;
-				$tags_src[] = $end;
-				$tags_new[] = self::TAG_INI.$ini;
-				$tags_new[] = $end.self::TAG_END;
-			}
+		// Splits the content
+		$parts = str_ireplace($tags_src, $tags_new, $html);
+		$parts = explode(self::TAG_END, $parts);
 
-			// Splits the content
-			$parts = str_ireplace($tags_src, $tags_new, $html);
-			$parts = explode(self::TAG_END, $parts);
+		// Init
+		$minified = '';
 
-			// Init
-			$minified = '';
+		// Enum parts
+		foreach ($parts as $part) {
 
-			// Enum parts
-			foreach ($parts as $part) {
+			// Find tag start
+			$pos = stripos($part, self::TAG_INI);
+			if (false === $pos) {
+				$before = $part;
+				$inside = '';
 
-				// Find tag start
-				$pos = stripos($part, self::TAG_INI);
-				if (false === $pos) {
-					$before = $part;
-					$inside = '';
+			/**
+			 * Full tag
+			 * Note: tags textarea and pre will remain intact
+			 */
+			} else {
 
-				// Full tag
-				} else {
+				// Detect before and inside content
+				$before = substr($part, 0, $pos);
+				$inside = substr($part, $pos + 32);
 
-					// Detect before and inside content
-					$before = substr($part, 0, $pos);
-					$inside = substr($part, $pos + 32);
+				// Process styles
+				if ('<style' == strtolower(substr($inside, 0, 6))) {
 
-					// Process styles
-					if ('<style' == strtolower(substr($inside, 0, 6))) {
+					// Check transformation
+					if ($styles) {
 
-						// Check transformation
-						if ($styles) {
+						// Remove left, right and extra espaces with UTF8 support
+						$inside = preg_replace(['/\>[^\S ]+/'.$pm, '/[^\S ]+\</'.$pm, '/\s+/'.$pm], ['>', '<', ' '], $inside);
 
-							// Remove left, right and extra espaces with UTF8 support
-							$inside = preg_replace(['/\>[^\S ]+/'.$pm, '/[^\S ]+\</'.$pm, '/(\s)+/'.$pm], ['>', '<', '\\1'], $inside);
-
-							// Remove CSS comments
-							if ($comments) {
-								$inside = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $inside);
-							}
-
-							// Safe minification
-							$inside = str_replace([chr(10), ' {', '{ ', ' }', '} ', '( ', ' )', ' :', ': ', ' ;', '; ', ' ,', ', ', ';}'],
-												  ['', 		'{',  '{',  '}',  '}',  '(',  ')',  ':',  ':',  ';',  ';',  ',',  ',',  '}'], $inside);
+						// Remove CSS comments
+						if ($comments) {
+							$inside = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $inside);
 						}
 
-					// Process scripts
-					} elseif ('<script' == strtolower(substr($inside, 0, 7))) {
+						// Safe minification
+						$inside = str_replace([chr(10), ' {', '{ ', ' }', '} ', '( ', ' )', ' :', ': ', ' ;', '; ', ' ,', ', ', ';}'],
+											  ['', 		'{',  '{',  '}',  '}',  '(',  ')',  ':',  ':',  ';',  ';',  ',',  ',',  '}'], $inside);
+					}
 
-						// Check transformation
-						if ($scripts) {
+				// Process scripts
+				} elseif ('<script' == strtolower(substr($inside, 0, 7))) {
 
-							// Remove Javascript comments
-							if ($comments) {
+					// Check transformation
+					if ($scripts) {
 
-							}
+						// Remove Javascript comments
+						if ($comments) {
+
 						}
 					}
 				}
-
-				// Remove HTML comments
-				if ($comments) {
-
-				}
-
-				// Add chunk
-				$minified .= $before.$inside;
 			}
 
-			// Done
-			$html = $minified;
-		}
+			// Remove HTML comments
+			if ($comments) {
 
-		/**
-		 * Removes self-closing markup for HTML5 documents
-		 */
-if (false && $selfClosing) {
-			$test = strtolower(substr(ltrim($html, 0, 15)));
-			if ($test == '<!doctype html>') {
-				$html = str_replace(' />', '>', $buffer);
 			}
-		}
 
-		if ($conditional) {
+			/**
+			 * Removes self-closing markup for HTML5 documents
+			 */
+			if ($selfClosing) {
+				$before = str_replace('/>', '>', $before);
+			}
 
-		}
+			/*
+			 * Removes conditional tags
+			 */
+			if ($conditional) {
 
-		// Remove extra spacing
-if (false && $spacing) {
-			$html = preg_replace('/\s+/', ' ', trim($html));
-		}
+			}
 
-		// Remove line breaks
-if (false && $lineBreaks) {
-			$html = str_replace(chr(13).chr(10), chr(10), $html);
-			$html = str_replace(chr(10), '', $html);
+			// Remove line breaks
+			if ($lineBreaks) {
+				$before = str_replace(chr(13).chr(10), chr(10), $before);
+				$before = str_replace(chr(10), '', $before);
+			}
+
+			// Remove extra spacing
+			if ($spacing) {
+				$before = preg_replace('/\s+/', ' ', trim($before));
+			}
+
+			// Add chunk
+			$minified .= $before.$inside;
 		}
 
 		// Done
-		return $html;
+		return $minified;
 	}
 
 
