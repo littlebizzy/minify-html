@@ -18,6 +18,15 @@ class Factory extends Helpers\Factory {
 
 
 	/**
+	 * Options object
+	 */
+	protected function createOptions() {
+		return new Options;
+	}
+
+
+
+	/**
 	 * Buffer instance
 	 */
 	protected function createBuffer() {
@@ -29,8 +38,8 @@ class Factory extends Helpers\Factory {
 	/**
 	 * Parser object
 	 */
-	protected function createParser() {
-		return new Html\Parser;
+	protected function createParser($args) {
+		return new Html\Parser($args);
 	}
 
 

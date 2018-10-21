@@ -17,9 +17,17 @@ class Buffer extends Helpers\Singleton {
 
 
 	/**
+	 * Parsing arguments
+	 */
+	private $args;
+
+
+
+	/**
 	 * Start buffering
 	 */
-	protected function onConstruct() {
+	public function start($args) {
+		$this->args = $args;
 		@ob_start([$this, 'output']);
 	}
 
@@ -38,49 +46,8 @@ class Buffer extends Helpers\Singleton {
 			return $buffer;
 		}
 
-		/**
-		 * Defines the regexp pattern modifiers for proper UTF8 support
-		 * Enabled by default, can be deactivated via constant
-		 */
-		$pm = 's';
-		if (!defined('MINIFY_HTML_UTF8_SUPPORT') || MINIFY_HTML_UTF8_SUPPORT) {
-			if (mb_detect_encoding($buffer, 'UTF-8', true)) {
-				$pm = 'u';
-			}
-		}
-
-		/**
-		 * Special chars treatment
-		 * - Replaces carriage return + line feed by only line feed
-		 * - Replaces tabs by spaces
-		 */
-		$buffer = str_replace(chr(13).chr(10), chr(10), $buffer);
-		$buffer = str_replace(chr(9), ' ', $buffer);
-
-		/**
-		 * Parse the entire HTML markup
-		 */
-		/* $buffer = $this->plugin->factory->parser([
-			'buffer' 		=> $buffer,
-			'pm' 			=> $pm,
-			'start'			=> $start,
-			'end'			=> $end,
-			'comments' 		=>
-			'styles'		=> (!defined('MINIFY_HTML_INLINE_STYLES') || MINIFY_HTML_INLINE_STYLES),
-			'scripts'		=>
-			'conditional' 	=>
-		}); */
-
-		/**
-		 * Removes self-closing markup for HTML5 documents
-		 * Disabled by default, can be enabled via constant
-		 */
-		if (defined('MINIFY_HTML_SELF_CLOSING') && MINIFY_HTML_SELF_CLOSING) {
-			$test = strtolower(substr(ltrim($buffer), 0, 15));
-			if ($test == '<!doctype html>') {
-				$buffer = str_replace(' />', '>', $buffer);
-			}
-		}
+	 	// Performs the HTML parsing
+		$buffer = $this->plugin->factory->parser($this->args)->parse($buffer);
 
 		// Done
 		return $buffer;

@@ -35,6 +35,18 @@ final class Core extends Helpers\Singleton {
 
 
 	/**
+	 * Check options in order to start buffering
+	 */
+	public function loaded() {
+		$options = $this->plugin->factory->options;
+		if ($options->minify()) {
+			$this->plugin->factory->buffer->start($options->args());
+		}
+	}
+
+
+
+	/**
 	 * Check front context
 	 */
 	private function front() {
@@ -66,15 +78,6 @@ final class Core extends Helpers\Singleton {
 
 		// Allow
 		return true;
-	}
-
-
-
-	/**
-	 * Start buffering
-	 */
-	public function loaded() {
-		$this->plugin->factory->buffer();
 	}
 
 
