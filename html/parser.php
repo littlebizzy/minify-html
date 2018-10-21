@@ -61,8 +61,15 @@ class Parser {
 		// Get vars
 		extract($this->args);
 
-		// Regexp pattern modifier
+		// Check regexp pattern modifier
 		$pm = $utf8Support? 'u' : 's';
+
+		/*
+		 * Removes conditional tags
+		 */
+		if ($conditional) {
+			$html = preg_replace('/<!--\[[^\]]*(?:](?!-->)[^\]]*)*]-->/U'.$pm, '', $html);
+		}
 
 		// Evaluates self-closing tags
 		if ($selfClosing) {
@@ -150,7 +157,7 @@ class Parser {
 
 			// Remove HTML comments
 			if ($comments) {
-
+				$before = preg_replace('/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*-->/'.$pm, '', $before);
 			}
 
 			/**
@@ -158,13 +165,6 @@ class Parser {
 			 */
 			if ($selfClosing) {
 				$before = str_replace('/>', '>', $before);
-			}
-
-			/*
-			 * Removes conditional tags
-			 */
-			if ($conditional) {
-
 			}
 
 			// Remove line breaks
