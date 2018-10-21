@@ -118,7 +118,7 @@ class Parser {
 						// Check transformation
 						if ($styles) {
 
-							// Remove tag start and end and spaces
+							// Remove left, right and extra espaces with UTF8 support
 							$inside = preg_replace(['/\>[^\S ]+/'.$pm, '/[^\S ]+\</'.$pm, '/(\s)+/'.$pm], ['>', '<', '\\1'], $inside);
 
 							// Remove CSS comments
@@ -126,9 +126,9 @@ class Parser {
 								$inside = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $inside);
 							}
 
-							// Minify
+							// Safe minification
 							$inside = str_replace([chr(10), ' {', '{ ', ' }', '} ', '( ', ' )', ' :', ': ', ' ;', '; ', ' ,', ', ', ';}'],
-													['', '{', '{', '}', '}', '(', ')', ':', ':', ';', ';', ',', ',', '}'], $inside);
+												  ['', 		'{',  '{',  '}',  '}',  '(',  ')',  ':',  ':',  ';',  ';',  ',',  ',',  '}'], $inside);
 						}
 
 					// Process scripts
