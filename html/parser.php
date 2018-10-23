@@ -67,7 +67,7 @@ class Parser {
 		extract($this->args);
 
 		// Check regexp pattern modifier
-		$pm = $utf8Support? 'u' : 's';
+		$pm = $utf8Support? 'u' : '';
 
 		// Evaluates self-closing tags
 		if ($selfClosing) {
@@ -222,14 +222,14 @@ class Parser {
 			if ($comments) {
 
 				// Prepare regexp
-				$regexp = '/<!--(?!<!)[^\[>].*?-->/sU'.$pm;
+				$pattern = '/<!--(?!<!)[^\[>].*?-->/s'.$pm;
 
 				// Remove in before HTML
-				$before = preg_replace($regexp, '', $before);
+				$before = preg_replace($pattern, '', $before);
 
 				// Check inside tag
 				if ($insideComments) {
-					$inside = preg_replace($regexp, '', $inside);
+					$inside = preg_replace($pattern, '', $inside);
 				}
 			}
 
