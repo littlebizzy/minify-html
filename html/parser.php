@@ -32,14 +32,16 @@ class Parser {
 	 * Default args
 	 */
 	private $defaults = [
-		'utf8Support' 	=> true,
-		'spacing'		=> false,
-		'lineBreaks'	=> false,
-		'comments'		=> false,
-		'styles'		=> false,
-		'scripts'		=> false,
-		'conditionals'	=> false,
-		'selfClosing'	=> false,
+		'utf8Support' 		=> true,
+		'spacing'			=> false,
+		'lineBreaks'		=> false,
+		'comments'			=> false,
+		'styles'			=> false,
+		'stylesComments'	=> false,
+		'scripts'			=> false,
+		'scriptsComments'	=> false,
+		'conditionals'		=> false,
+		'selfClosing'		=> false,
 	];
 
 
@@ -146,7 +148,7 @@ class Parser {
 						$inside = preg_replace(['/\>[^\S ]+/'.$pm, '/[^\S ]+\</'.$pm, '/\s+/'.$pm], ['>', '<', ' '], $inside);
 
 						// Remove CSS comments
-						if ($comments) {
+						if ($styleComments) {
 							$inside = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $inside);
 						}
 
@@ -197,10 +199,9 @@ class Parser {
 
 								/**
 								 * Remove Javascript comments
-								 * How to skip CDATA content?
 								 * https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
 								 */
-								if ($comments) {
+								if ($scriptsComments) {
 									$pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/';
 									$code = preg_replace($pattern, '', $code);
 								}

@@ -51,7 +51,7 @@ class Options {
 		$this->args['utf8Support'] = !defined('MINIFY_HTML_UTF8_SUPPORT') || MINIFY_HTML_UTF8_SUPPORT;
 
 		/**
-		 * Decides if remove HTML comments, Styles comments and Javascript comments
+		 * Decides if remove HTML comments (including HTML comments inside the pre tag)
 		 * Enabled by default, it can be deactivated via constant
 		 */
 		$this->args['comments'] = !defined('MINIFY_HTML_REMOVE_COMMENTS') || MINIFY_HTML_REMOVE_COMMENTS;
@@ -63,10 +63,22 @@ class Options {
 		$this->args['styles'] = !defined('MINIFY_HTML_INLINE_STYLES') || MINIFY_HTML_INLINE_STYLES;
 
 		/**
+		 * Decides if remove inline styles comments
+		 * Enabled by default, it can be deactivated via constant
+		 */
+		$this->args['stylesComments'] = !defined('MINIFY_HTML_INLINE_STYLES_COMMENTS') || MINIFY_HTML_INLINE_STYLES_COMMENTS;
+
+		/**
 		 * Decides if minify inline scripts between <script></script> tags
 		 * Disabled by default, it can be enabled via constant
 		 */
 		$this->args['scripts'] = defined('MINIFY_HTML_INLINE_SCRIPTS') && MINIFY_HTML_INLINE_SCRIPTS;
+
+		/**
+		 * Decides if remove inline scripts comments, because some times it is used to store CDATA
+		 * Disabled by default, it can be enabled via constant
+		 */
+		$this->args['scriptsComments'] = defined('MINIFY_HTML_INLINE_SCRIPTS_COMMENTS') && MINIFY_HTML_INLINE_SCRIPTS_COMMENTS;
 
 		/**
 		 * Decides if remove conditional tags like
