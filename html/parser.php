@@ -60,6 +60,9 @@ class Parser {
 	 */
 	public function parse($html) {
 
+
+		/* Prepare input */
+
 		// Get vars
 		extract($this->args);
 
@@ -72,6 +75,9 @@ class Parser {
 			$selfClosing = ($test == '<!doctype html>');
 		}
 
+
+		/* Early replacements */
+
 		/*
 		 * Removes conditional tags
 		 */
@@ -79,7 +85,10 @@ class Parser {
 			$html = preg_replace('/<!--\[[^\]]*(?:](?!-->)[^\]]*)*]-->/U'.$pm, '', $html);
 		}
 
-		// Transformations
+
+		/* Transformations */
+
+		// Sensitive tags
 		$tags_src = [];
 		$tags_new = [];
 		$tags = ['style', 'script', 'textarea', 'pre'];
@@ -102,7 +111,7 @@ class Parser {
 		$parts = str_ireplace($tags_src, $tags_new, $html);
 		$parts = explode(self::TAG_END, $parts);
 
-		// Init
+		// Init output
 		$minified = '';
 
 		// Enum parts
@@ -118,8 +127,8 @@ class Parser {
 				$inside = '';
 
 			/**
-			 * Full tag
-			 * Note: tags textarea and pre will remain intact
+			 * Process sensitive tags
+			 * Note: tags textarea and pre will remain intact (but pre tag could lose the html comments)
 			 */
 			} else {
 
