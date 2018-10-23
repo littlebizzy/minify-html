@@ -66,17 +66,17 @@ class Parser {
 		// Check regexp pattern modifier
 		$pm = $utf8Support? 'u' : 's';
 
+		// Evaluates self-closing tags
+		if ($selfClosing) {
+			$test = strtolower(substr(ltrim($html), 0, 15));
+			$selfClosing = ($test == '<!doctype html>');
+		}
+
 		/*
 		 * Removes conditional tags
 		 */
 		if ($conditionals) {
 			$html = preg_replace('/<!--\[[^\]]*(?:](?!-->)[^\]]*)*]-->/U'.$pm, '', $html);
-		}
-
-		// Evaluates self-closing tags
-		if ($selfClosing) {
-			$test = strtolower(substr(ltrim($html), 0, 15));
-			$selfClosing = ($test == '<!doctype html>');
 		}
 
 		// Transformations
@@ -168,8 +168,7 @@ class Parser {
 			if ($comments) {
 
 				// Prepare regexp
-				//$regexp = '/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*-->/U'.$pm;
-				$regexp = '/<!--(?!<!)[^\[>].*?-->/U'.$pm;
+				$regexp = '/<!--(?!<!)[^\[>].*?-->/sU'.$pm;
 
 				// Remove in before HTML
 				$before = preg_replace($regexp, '', $before);
