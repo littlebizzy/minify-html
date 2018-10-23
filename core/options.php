@@ -69,11 +69,11 @@ class Options {
 		$this->args['scripts'] = defined('MINIFY_HTML_INLINE_SCRIPTS') && MINIFY_HTML_INLINE_SCRIPTS;
 
 		/**
-		 * Decides if remove conditionals tags like
+		 * Decides if remove conditional tags like
 		 * <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 		 * Enabled by default, it can be deactivated via constant
 		 */
-		$this->args['conditional'] = !defined('MINIFY_HTML_REMOVE_CONDITIONALS') || MINIFY_HTML_REMOVE_CONDITIONALS;
+		$this->args['conditionals'] = !defined('MINIFY_HTML_REMOVE_CONDITIONALS') || MINIFY_HTML_REMOVE_CONDITIONALS;
 
 		/**
 		 * Decides if removes self-closing markup for HTML5 documents
@@ -83,7 +83,7 @@ class Options {
 
 		// Minify or not decision
 		$this->minify = $this->args['spacing'] || $this->args['lineBreaks'] || $this->args['comments'] ||
-						$this->args['styles'] || $this->args['scripts'] || $this->args['conditional'] || $this->args['selfClosing'];
+						$this->args['styles'] || $this->args['scripts'] || $this->args['conditionals'] || $this->args['selfClosing'];
 	}
 
 

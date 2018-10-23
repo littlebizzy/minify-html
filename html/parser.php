@@ -38,7 +38,7 @@ class Parser {
 		'comments'		=> false,
 		'styles'		=> false,
 		'scripts'		=> false,
-		'conditional'	=> false,
+		'conditionals'	=> false,
 		'selfClosing'	=> false,
 	];
 
@@ -69,7 +69,7 @@ class Parser {
 		/*
 		 * Removes conditional tags
 		 */
-		if ($conditional) {
+		if ($conditionals) {
 			$html = preg_replace('/<!--\[[^\]]*(?:](?!-->)[^\]]*)*]-->/U'.$pm, '', $html);
 		}
 
@@ -107,6 +107,9 @@ class Parser {
 
 		// Enum parts
 		foreach ($parts as $part) {
+
+			// Init
+			$insideComments = false;
 
 			// Find tag start
 			$pos = stripos($part, self::TAG_INI);
@@ -154,12 +157,27 @@ class Parser {
 
 						}
 					}
+
+				// Process pre tag
+				} elseif ('<pre' == strtolower(substr($inside, 0, 4))) {
+					$insideComments = true;
 				}
 			}
 
 			// Remove HTML comments
 			if ($comments) {
-				$before = preg_replace('/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*-->/'.$pm, '', $before);
+
+				// Prepare regexp
+				//$regexp = '/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*-->/U'.$pm;
+				$regexp = '/<!--(?!<!)[^\[>].*?-->/U'.$pm;
+
+				// Remove in before HTML
+				$before = preg_replace($regexp, '', $before);
+
+				// Check inside tag
+				if ($insideComments) {
+					$inside = preg_replace($regexp, '', $inside);
+				}
 			}
 
 			/**
@@ -175,9 +193,10 @@ class Parser {
 				$before = str_replace(chr(10), '', $before);
 			}
 
-			// Remove extra spacing
+			// Remove tabs and extra spacing
 			if ($spacing) {
-				$before = preg_replace('/\s+/', ' ', trim($before));
+				$before = preg_replace('/\x9/', ' ', $before);
+				$before = preg_replace('/\x20+/', ' ', trim($before, ' \0\x0B'));
 			}
 
 			// Add chunk
