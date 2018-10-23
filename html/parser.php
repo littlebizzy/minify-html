@@ -161,9 +161,52 @@ class Parser {
 					// Check transformation
 					if ($scripts) {
 
-						// Remove Javascript comments
-						if ($comments) {
+						// Check closing tags
+						$pos1 = strpos($inside, '>');
+						$pos2 = strrpos($inside, '<');
+						if ($pos1 && $pos2 && $pos2 > $pos1) {
 
+							// Split in lines
+							$code = trim(substr($inside, $pos1 + 1, $pos2 - $pos1 - 1));
+							if ('' !== $code) {
+
+								// Split in lines
+								$code = str_replace(chr(13).chr(10), chr(10), $code);
+								$code = explode(chr(10), $code);
+
+								// Enumeration
+								$lines = [];
+								foreach ($code as $line) {
+
+									// Check line
+									$line = trim($line);
+									if ('' === $line) {
+										continue;
+									}
+
+									// Remove extra characters
+									$line = preg_replace('/;+/', ';', $line);
+									$line = preg_replace('/\s+/', ' ', $line);
+
+									// Added
+									$lines[] = trim($line);
+								}
+
+								// Minify it
+								$code = implode('', $lines);
+
+								/**
+								 * Remove Javascript comments
+								 * https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
+								 */
+								if ($comments) {
+									$pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/';
+									$code = preg_replace($pattern, '', $code);
+								}
+
+								// Done
+								$inside = substr($inside, 0, $pos1 + 1).$code.substr($inside, $pos2);
+							}
 						}
 					}
 
