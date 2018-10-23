@@ -197,6 +197,7 @@ class Parser {
 
 								/**
 								 * Remove Javascript comments
+								 * How to skip CDATA content?
 								 * https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
 								 */
 								if ($comments) {
@@ -204,7 +205,8 @@ class Parser {
 									$code = preg_replace($pattern, '', $code);
 								}
 
-								// Done
+								// Done?
+								// Needs to remove line breaks before and after
 								$inside = substr($inside, 0, $pos1 + 1).$code.substr($inside, $pos2);
 							}
 						}
