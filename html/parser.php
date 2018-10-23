@@ -144,26 +144,7 @@ class Parser {
 					// Check transformation
 					if ($styles) {
 
-						// Remove left, right and extra espaces with UTF8 support
-						$inside = preg_replace(['/\>[^\S ]+/'.$pm, '/[^\S ]+\</'.$pm, '/\s+/'.$pm], ['>', '<', ' '], $inside);
-
-						// Remove CSS comments
-						if ($styleComments) {
-							$inside = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $inside);
-						}
-
-						// Safe minification
-						$inside = str_replace([chr(10), ' {', '{ ', ' }', '} ', '( ', ' )', ' :', ': ', ' ;', '; ', ' ,', ', ', ';}'],
-											  ['', 		'{',  '{',  '}',  '}',  '(',  ')',  ':',  ':',  ';',  ';',  ',',  ',',  '}'], $inside);
-					}
-
-				// Process scripts
-				} elseif ('<script' == strtolower(substr($inside, 0, 7))) {
-
-					// Check transformation
-					if ($scripts) {
-
-						// Check closing tags
+						// Check enclosed tags
 						$pos1 = strpos($inside, '>');
 						$pos2 = strrpos($inside, '<');
 						if ($pos1 && $pos2 && $pos2 > $pos1) {
@@ -172,6 +153,42 @@ class Parser {
 							$code = trim(substr($inside, $pos1 + 1, $pos2 - $pos1 - 1));
 							if ('' !== $code) {
 
+								// Remove CSS comments
+								if ($stylesComments) {
+									$code = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $code);
+								}
+
+								// Minification
+								$code = $this->spacing($code);
+								$code = str_replace([chr(10), ' {', '{ ', ' }', '} ', '( ', ' )', ' :', ': ', ' ;', '; ', ' ,', ', ', ';}'],
+													['', 	  '{',  '{',  '}',  '}',  '(',  ')',  ':',  ':',  ';',  ';',  ',',  ',',  '}'], $code);
+
+								// Prepare surrounding tags
+								$open = $this->inline(substr($inside, 0, $pos1 + 1));
+								$close = $this->inline(substr($inside, $pos2));
+
+								// Done
+								$inside = $open.$code.$close;
+							}
+						}
+					}
+
+				// Process scripts
+				} elseif ('<script' == strtolower(substr($inside, 0, 7))) {
+
+					// Check transformation
+					if ($scripts) {
+
+						// Check enclosed tags
+						$pos1 = strpos($inside, '>');
+						$pos2 = strrpos($inside, '<');
+						if ($pos1 && $pos2 && $pos2 > $pos1) {
+
+							// Split in lines
+							$code = trim(substr($inside, $pos1 + 1, $pos2 - $pos1 - 1));
+							if ('' !== $code) {
+// Debug point
+//error_log($inside);
 								// Split in lines
 								$code = str_replace(chr(13).chr(10), chr(10), $code);
 								$code = explode(chr(10), $code);
@@ -187,8 +204,10 @@ class Parser {
 									}
 
 									// Remove extra characters
+									$line = $this->spacing($line);
 									$line = preg_replace('/;+/', ';', $line);
-									$line = preg_replace('/\s+/', ' ', $line);
+									$line = str_replace([' {', '{ ', ' }', '} ', '( ', ' )', ' =', '= ', ' :', ': ', ' ;', '; ', ' ,', ', '],
+														['{',  '{',  '}',  '}',  '(',  ')',  '=',  '=',  ':',  ':',  ';',  ';',  ',',  ',' ], $line);
 
 									// Added
 									$lines[] = trim($line);
@@ -206,9 +225,17 @@ class Parser {
 									$code = preg_replace($pattern, '', $code);
 								}
 
-								// Done?
-								// Needs to remove line breaks before and after
-								$inside = substr($inside, 0, $pos1 + 1).$code.substr($inside, $pos2);
+								// Remove last semicolon
+								$code = rtrim(trim($code), ';');
+
+								// Prepare surrounding tags
+								$open = $this->inline(substr($inside, 0, $pos1 + 1));
+								$close = $this->inline(substr($inside, $pos2));
+
+								// Done
+								$inside = $open.$code.$close;
+// Debug point
+//error_log($inside);
 							}
 						}
 					}
@@ -247,8 +274,7 @@ class Parser {
 
 			// Remove tabs and extra spacing
 			if ($spacing) {
-				$before = preg_replace('/\x9/', ' ', $before);
-				$before = preg_replace('/\x20+/', ' ', trim($before, ' \0\x0B'));
+				$before = $this->spacing($before);
 			}
 
 			// Add chunk
@@ -257,6 +283,29 @@ class Parser {
 
 		// Done
 		return $minified;
+	}
+
+
+
+	/**
+	 * Prepares inline tag
+	 */
+	private function inline($string) {
+		$string = str_replace(chr(13).chr(10), chr(10), $string);
+		$string = str_replace(chr(10), ' ', $string);
+		$string = $this->spacing($string);
+		return $string;
+	}
+
+
+
+	/**
+	 * Removes extra spacing
+	 */
+	private function spacing($string) {
+		$string = preg_replace('/\x9/', ' ', $string);
+		$string = preg_replace('/\x20+/', ' ', trim($string, ' \0\x0B'));
+		return $string;
 	}
 
 
