@@ -33,6 +33,12 @@ class Options {
 	public function __construct() {
 
 		/**
+		 * Decides if enable plugin functionality
+		 * Enabled by default, can be deactivated via constant
+		 */
+		$this->args['enabled'] = !defined('MINIFY_HTML') || MINIFY_HTML;
+
+		/**
 		 * Decides if replace extra spaces in HTML (except in styles, javascript code, and the content of textarea and pre tags)
 		 * Enabled by default, can be deactivated via constant
 		 */
@@ -94,8 +100,9 @@ class Options {
 		$this->args['selfClosing'] = defined('MINIFY_HTML_REMOVE_HTML5_SELF_CLOSING') && MINIFY_HTML_REMOVE_HTML5_SELF_CLOSING;
 
 		// Minify or not decision
-		$this->minify = $this->args['spacing'] || $this->args['lineBreaks'] || $this->args['comments'] ||
-						$this->args['styles'] || $this->args['scripts'] || $this->args['conditionals'] || $this->args['selfClosing'];
+		$this->minify = $this->args['enabled'] && (
+		 				$this->args['spacing'] || $this->args['lineBreaks'] || $this->args['comments'] ||
+						$this->args['styles'] || $this->args['scripts'] || $this->args['conditionals'] || $this->args['selfClosing']);
 	}
 
 
