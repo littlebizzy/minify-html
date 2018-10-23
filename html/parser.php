@@ -233,9 +233,7 @@ class Parser {
 				}
 			}
 
-			/**
-			 * Removes self-closing markup for HTML5 documents
-			 */
+			// Removes self-closing markup for HTML5 documents
 			if ($selfClosing) {
 				$before = str_replace('/>', '>', $before);
 			}
