@@ -76,6 +76,12 @@ final class Core extends Helpers\Singleton {
 			return false;
 		}
 
+		// Login page
+		global $pagenow;
+		if (!empty($pagenow) && 'wp-login.php' == $pagenow) {
+			return false;
+		}
+
 		// Allow
 		return true;
 	}
