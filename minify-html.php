@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Minify HTML LittleBizzy
+Plugin Name: Minify HTML
 Plugin URI: https://www.littlebizzy.com/plugins/minify-html
 Description: Tactfully minifies HTML output and markup to remove line breaks, whitespace, comments, and other code bloat to cleanup source code and improve speed.
 Version: 1.0.0
