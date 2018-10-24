@@ -39,7 +39,7 @@ class Options {
 		$this->args['enabled'] = !defined('MINIFY_HTML') || MINIFY_HTML;
 
 		/**
-		 * Decides if replace extra spaces in HTML (except in styles, javascript code, and the content of textarea and pre tags)
+		 * Decides if replace extra spaces in HTML and espaces between tags (except in styles, javascript code, and the content of textarea and pre tags)
 		 * Enabled by default, can be deactivated via constant
 		 */
 		$this->args['spacing'] = !defined('MINIFY_HTML_REMOVE_EXTRA_SPACING') || MINIFY_HTML_REMOVE_EXTRA_SPACING;
@@ -81,7 +81,7 @@ class Options {
 		$this->args['scripts'] = defined('MINIFY_HTML_INLINE_SCRIPTS') && MINIFY_HTML_INLINE_SCRIPTS;
 
 		/**
-		 * Decides if remove inline scripts comments, because some times it is used to store CDATA
+		 * Decides if remove inline scripts comments
 		 * Disabled by default, it can be enabled via constant
 		 */
 		$this->args['scriptsComments'] = defined('MINIFY_HTML_INLINE_SCRIPTS_COMMENTS') && MINIFY_HTML_INLINE_SCRIPTS_COMMENTS;
