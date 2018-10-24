@@ -1,4 +1,4 @@
-=== Minify HTML LittleBizzy ===
+=== Minify HTML ===
 
 Contributors: littlebizzy
 Donate link: https://www.patreon.com/littlebizzy
