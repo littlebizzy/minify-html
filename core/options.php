@@ -57,7 +57,7 @@ class Options {
 		$this->args['utf8Support'] = !defined('MINIFY_HTML_UTF8_SUPPORT') || MINIFY_HTML_UTF8_SUPPORT;
 
 		/**
-		 * Decides if remove HTML comments (including HTML comments inside the pre tag)
+		 * Decides if remove HTML comments (including HTML comments inside the pre tag but leaving the textarea comments)
 		 * Enabled by default, it can be deactivated via constant
 		 */
 		$this->args['comments'] = !defined('MINIFY_HTML_REMOVE_COMMENTS') || MINIFY_HTML_REMOVE_COMMENTS;
