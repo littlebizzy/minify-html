@@ -75,7 +75,7 @@ class Options {
 		$this->args['stylesComments'] = !defined('MINIFY_HTML_INLINE_STYLES_COMMENTS') || MINIFY_HTML_INLINE_STYLES_COMMENTS;
 
 		/**
-		 * Decides if minify inline scripts between <script></script> tags
+		 * Decides if minify inline scripts between <script></script> tags, removing extra espaces and line breaks
 		 * Disabled by default, it can be enabled via constant
 		 */
 		$this->args['scripts'] = defined('MINIFY_HTML_INLINE_SCRIPTS') && MINIFY_HTML_INLINE_SCRIPTS;
