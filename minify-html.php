@@ -3,7 +3,7 @@
 Plugin Name: Minify HTML
 Plugin URI: https://www.littlebizzy.com/plugins/minify-html
 Description: Tactfully minifies HTML output and markup to remove line breaks, whitespace, comments, and other code bloat to cleanup source code and improve speed.
-Version: 1.0.0
+Version: 1.0.1
 Author: LittleBizzy
 Author URI: https://www.littlebizzy.com
 License: GPLv3
@@ -25,7 +25,7 @@ if (!function_exists('add_action')) {
 // Plugin constants
 const FILE = __FILE__;
 const PREFIX = 'mnfhtm';
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 
 // Loader
 require_once dirname(FILE).'/helpers/loader.php';
