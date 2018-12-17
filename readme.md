@@ -2,11 +2,28 @@
 
 Tactfully minifies HTML output and markup to remove line breaks, whitespace, comments, and other code bloat to cleanup source code and improve speed.
 
-* [Plugin homepage](https://www.littlebizzy.com/plugins/minify-html)
-* [Download (WordPress.org)](https://wordpress.org/plugins/minify-html-littlebizzy)
-* [Free Facebook group](https://www.facebook.com/groups/littlebizzy/)
+* [Plugin Homepage (LittleBizzy.com)](https://www.littlebizzy.com/plugins/minify-html)
+* [Free Facebook Group](https://www.facebook.com/groups/littlebizzy/)
 
-### Support issues
+### Defined Constants
+
+    /* Plugin Meta */
+    define('DISABLE_NAG_NOTICES', true);
+    
+    /* Minify HTML Functions */
+    define('MINIFY_HTML', true);
+    define('MINIFY_HTML_INLINE_STYLES', true);
+    define('MINIFY_HTML_INLINE_STYLES_COMMENTS', true);
+    define('MINIFY_HTML_REMOVE_COMMENTS', true);
+    define('MINIFY_HTML_REMOVE_CONDITIONALS', true);
+    define('MINIFY_HTML_REMOVE_EXTRA_SPACING', true);
+    define('MINIFY_HTML_REMOVE_HTML5_SELF_CLOSING', false);
+    define('MINIFY_HTML_REMOVE_LINE_BREAKS', true);
+    define('MINIFY_HTML_INLINE_SCRIPTS', false);
+    define('MINIFY_HTML_INLINE_SCRIPTS_COMMENTS', false);
+    define('MINIFY_HTML_UTF8_SUPPORT', true);
+
+### Support Issues
 
 *Please do not submit Pull Requests. Instead, kindly create a new Issue with relevant information if you are an experienced developer, otherwise post your comments in our free Facebook group.*
 
