@@ -2,26 +2,28 @@
 
 Tactfully minifies HTML output and markup to remove line breaks, whitespace, comments, and other code bloat to cleanup source code and improve speed.
 
-* [Plugin Homepage (LittleBizzy.com)](https://www.littlebizzy.com/plugins/minify-html)
-* [Free Facebook Group](https://www.facebook.com/groups/littlebizzy/)
+* [Plugin Homepage](https://www.littlebizzy.com/plugins/minify-html)
+* [Download Latest Version (ZIP)](https://github.com/littlebizzy/minify-html/archive/1.0.1.zip)
+* [**Become A LittleBizzy.com Member Today!**](https://www.littlebizzy.com/members)
 
 ### Defined Constants
 
     /* Plugin Meta */
-    define('DISABLE_NAG_NOTICES', true);
+    define('AUTOMATIC_UPDATE_PLUGINS', false); // default = false
+    define('DISABLE_NAG_NOTICES', true); // default = true
     
     /* Minify HTML Functions */
-    define('MINIFY_HTML', true);
-    define('MINIFY_HTML_INLINE_STYLES', true);
-    define('MINIFY_HTML_INLINE_STYLES_COMMENTS', true);
-    define('MINIFY_HTML_REMOVE_COMMENTS', true);
-    define('MINIFY_HTML_REMOVE_CONDITIONALS', true);
-    define('MINIFY_HTML_REMOVE_EXTRA_SPACING', true);
-    define('MINIFY_HTML_REMOVE_HTML5_SELF_CLOSING', false);
-    define('MINIFY_HTML_REMOVE_LINE_BREAKS', true);
-    define('MINIFY_HTML_INLINE_SCRIPTS', false);
-    define('MINIFY_HTML_INLINE_SCRIPTS_COMMENTS', false);
-    define('MINIFY_HTML_UTF8_SUPPORT', true);
+    define('MINIFY_HTML', true); // default = true
+    define('MINIFY_HTML_INLINE_STYLES', true); // default = true
+    define('MINIFY_HTML_INLINE_STYLES_COMMENTS', true); // default = true
+    define('MINIFY_HTML_REMOVE_COMMENTS', true); // default = true
+    define('MINIFY_HTML_REMOVE_CONDITIONALS', true); // default = true
+    define('MINIFY_HTML_REMOVE_EXTRA_SPACING', true); // default = true
+    define('MINIFY_HTML_REMOVE_HTML5_SELF_CLOSING', false); // default = false
+    define('MINIFY_HTML_REMOVE_LINE_BREAKS', true); // default = true
+    define('MINIFY_HTML_INLINE_SCRIPTS', false); // default = false
+    define('MINIFY_HTML_INLINE_SCRIPTS_COMMENTS', false); // default = false
+    define('MINIFY_HTML_UTF8_SUPPORT', true); // default = true
 
 ### Compatibility
 
